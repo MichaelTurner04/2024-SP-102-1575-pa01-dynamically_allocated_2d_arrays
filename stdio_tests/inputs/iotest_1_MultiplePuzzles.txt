@@ -1,0 +1,28 @@
+5
+2 2 2
+q h
+k c
+1 D
+0 L
+2 2 2
++ -
+/ *
+0 U
+1 R
+2 2 2
+< >
+[ ]
+1 L
+0 L
+2 2 2
+Q H
+K C
+0 R
+1 U
+5 5 1
+o x x x o
+x o o o x
+x x o x o
+x o o o x
+o x x x o
+2 L

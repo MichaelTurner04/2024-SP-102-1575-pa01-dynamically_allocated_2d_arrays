@@ -1,0 +1,6 @@
+#include "puzzle.h"
+#include "test_utils.hpp"
+
+int main(const int argc, const char **argv) {
+  return test_wrapper(argc, argv, []() { return true; });
+}

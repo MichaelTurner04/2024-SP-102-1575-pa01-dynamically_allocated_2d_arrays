@@ -1,0 +1,44 @@
+1
+30 30 12
+! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! !
+! " # $ % & ' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = >
+! # % ' ) + - / 1 3 5 7 9 ; = ? A C E G I K M O Q S U W Y [
+! $ ' * - 0 3 6 9 < ? B E H K N Q T W Z ] ` c f i l o r u x
+! % ) - 1 5 9 = A E I M Q U Y ] a e i m q u y $ ( , 0 4 8 <
+! & + 0 5 : ? D I N S X ] b g l q v " ' , 1 6 ; @ E J O T Y
+! ' - 3 9 ? E K Q W ] c i o u " ( . 4 : @ F L R X ^ d j p v
+! ( / 6 = D K R Y ` g n u # * 1 8 ? F M T [ b i p w % , 3 :
+! ) 1 9 A I Q Y a i q y ( 0 8 @ H P X ` h p x ' / 7 ? G O W
+! * 3 < E N W ` i r " + 4 = F O X a j s # , 5 > G P Y b k t
+! + 5 ? I S ] g q " , 6 @ J T ^ h r # - 7 A K U _ i s $ . 8
+! , 7 B M X c n y + 6 A L W b m x * 5 @ K V a l w ) 4 ? J U
+! - 9 E Q ] i u ( 4 @ L X d p # / ; G S _ k w * 6 B N Z f r
+! . ; H U b o # 0 = J W d q % 2 ? L Y f s ' 4 A N [ h u ) 6
+! / = K Y g u * 8 F T b p % 3 A O ] k y . < J X f t ) 7 E S
+! 0 ? N ] l " 1 @ O ^ m # 2 A P _ n $ 3 B Q ` o % 4 C R a p
+! 1 A Q a q ( 8 H X h x / ? O _ o & 6 F V f v - = M ] m $ 4
+! 2 C T e v . ? P a r * ; L ] n & 7 H Y j " 3 D U f w / @ Q
+! 3 E W i " 4 F X j # 5 G Y k $ 6 H Z l % 7 I [ m & 8 J \ n
+! 4 G Z m ' : M ` s - @ S f y 3 F Y l & 9 L _ r , ? R e x 2
+! 5 I ] q , @ T h # 7 K _ s . B V j % 9 M a u 0 D X l ' ; O
+! 6 K ` u 1 F [ p , A V k ' < Q f " 7 L a v 2 G \ q - B W l
+! 7 M c y 6 L b x 5 K a w 4 J ` v 3 I _ u 2 H ^ t 1 G ] s 0
+! 8 O f $ ; R i ' > U l * A X o - D [ r 0 G ^ u 3 J a x 6 M
+! 9 Q i ( @ X p / G _ w 6 N f % = U m , D \ t 3 K c " : R j
+! : S l , E ^ w 7 P i ) B [ t 4 M f & ? X q 1 J c # < U n .
+! ; U o 0 J d % ? Y s 4 N h ) C ] w 8 R l - G a " < V p 1 K
+! < W r 4 O j , G b $ ? Z u 7 R m / J e ' B ] x : U p 2 M h
+! = Y u 8 T p 3 O k . J f ) E a $ @ \ x ; W s 6 R n 1 M i ,
+! > [ x < Y v : W t 8 U r 6 S p 4 Q n 2 O l 0 M j . K h , I
+1 L
+23 L
+19 L
+25 R
+3 R
+17 R
+7 U
+28 U
+6 U
+12 D
+9 D
+22 D

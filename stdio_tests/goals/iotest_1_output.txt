@@ -1,0 +1,18 @@
+c q 
+k h 
+
+/ - 
+* + 
+
+> < 
+] [ 
+
+H C 
+K Q 
+
+o x x x o 
+x o o o x 
+x o x o x 
+x o o o x 
+o x x x o 
+
