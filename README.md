@@ -1,274 +1,159 @@
-# grade.sh: a bash-based automated grading framework
 
-## Introduction
+_Programming Assignment 1 (PA01)_
 
-`grade.sh` is a lightweight grading framework intended to be easy to configure and use.
-It has a minimal set of dependencies and has a matching Docker image (coming soon) that 
-further reduces initial setup overhead.
+# Dynamically Allocated Two-Dimensional Arrays
 
-`grade.sh` uses the existing CI (continuous integration) environment provided by GitLab
-to run a set of automated tests each time a student pushes a new commit.  CI frameworks
-are already designed to test code correctness and prevent regressions, so this approach
-is easily adapted to the grading of programming assignments.  
+--- 
 
-Instead of submitting their code once on the due date and waiting anxiously to see if 
-their code has a fatal bug, students can submit, and more importantly, iteratively 
-improve their code as many times as they want prior to the due date.  This increased
-grade transparency facilitates increased student engagement, as the grading process is
-no longer a black box that spits out a number.  Students can even run the grading script
-interactively, during which a debugger is automatically launched in the case of a failed 
-test.
+## Assignment Description:
+![Johnathan Jones](archeology.jpg)
 
-Specifically, the grading script will *force* the student into the debugger when they are 
-running the grader interactively and a test fails.  This encourages an incremental coding
-approach in which components of the program are completed and tested before moving on to
-the next segment.
+You are the world-renowned archeologist Jonathan Jones, out on yet another expedition filled with danger and mystery. You’ve finally arrived at the resting place of the ancient stone mask, but a series of puzzles blocks your path!
 
-Because it runs entirely in [the cloud](https://i.redd.it/l4bu591x5syy.jpg), `grade.sh` 
-does not require the instructor to download the entire set of student code and execute 
-(potentially malicious) student code on their own compier.  `grade.sh` also provides
-more flexibility than turn-key grading platforms, and at a much lower cost.
+Each puzzle consists of a grid of symbols. Each row and each column of the puzzle can be rotated in either direction. When rotated, the furthest symbol wraps around to the opposite end of the grid, and the rest of the symbols each shift one position.
 
-## Setup
+![sample io](puzzleio.png)
 
-### Getting `grade-sh`
+Since Jonathan Jones always comes prepared, you already know the solutions to these puzzles and have made a list of moves needed to get through each one.
 
-To use `grade.sh`, simply fork this repository, or, if you do not have the option to fork
-(e.g. creating a new example repo or using a different Git host), you can create an entirely
-blank repository and run the following:
+## Input:
 
-```sh
-# HTTPS
-git remote add upstream https://gitlab.com/classroomcode/grade-sh/grade-sh.git
-
-# SSH
-git remote add upstream git@gitlab.com:classroomcode/grade-sh/grade-sh.git
+The input to your program is structured as follows:
+```
+< # of puzzles >
+(for each puzzle:)
+< # of rows > < # of columns > < # of moves >
+[<char> <char> ... 
+ <char> <char>
+ ...              ] (symbols in puzzle)
+(for each move:)
+< row/column> < direction > (R - right, L - left, D - down, U - up)
 ```
 
-Then follow the [syncing instructions](#syncing-changes) to download the latest version of `grade-sh`.
+### Sample input/output:
 
-[Configure](#configuring) `grade.sh` and add any input files, unit
-tests, or instructor-provided files, and `grade.sh` will automatically run once you
-(or a student) runs `git push`.
+**INPUT:**
+```
+2
+3 4 4
+A D U X
+B E V Y
+C F W Z
+0 R
+1 D
+2 L
+3 U
+2 2 1
+@ #
+$ %
+1 R
+```
+**OUTPUT:**
+```
+X F D Y
+B A V C
+E W Z U
 
-### Configuring
-
-`grade.sh` is primarily configured using a simple config file, `grade.conf`.
-The following options are currently available:
-
-* `main_file` (string), the entry point to the student program - in C++, this is the file containing `main()`
-* `language` (string), the programming language used in the assignment (C++, Python, Bash, and Rust currently)
-* `enable_static_analysis` (bool), whether student code should be scored with a static analyzer - `mypy` for Python, `cppcheck` for C++, `shellcheck` for Bash, and Rust doesn't need this!
-* `enable_format_check` (bool), whether the format of the code should be scored - `black` for Python, `clang-format` for C++, `shfmt` for Bash, and `rustfmt` for Rust.
-
-To set a variable, just use `=`, e.g., `enable_static_analysis=true`.  `grade.conf` contains an 
-example configuration and more thorough descriptions of the options.
-
-### Adding tests
-
-`grade.sh` currently supports numerous kinds of automated tests of files and code in student repositories:
-
-Python, Bash, C++, and Rust tests:
-1. [IO tests](#io-tests) (checking a program's std output given some std input)
-2. [Argument tests](#arg-tests) (running a program against a variety of argument lists, often used for file io)
-3. [Unit tests](#unit-tests) (importing/linking to student code to run predicates)
-4. [Code-style format tests](#style-test), run a code format checker to automatically enforce good code style.
-
-Python, Bash, C++ tests
-5. [Static analysis](static-test), run static analyzers on the student code, and give points accordinly.
-
-Python only tests (currently, others TODO):
-6. [CFG tests](#cfg-tests), a simple python-only task of mimicking a CFG by producing it's code
-7. [doctest tests](#doctest-tests), a python-only execution of any doctests present in the main driver.
-
-Language-independent tests:
-8. [File existence tests](#file-exist-tests), a test for the existence of files, with appropriate data types.
-9. [Custom tests](#custom-tests), defined in `bash`
-
-They are automatically "enabled" by merely including the appropriate files in the given sub-directories (below).
-They are automatically "disabled" by not including files in those sub-directories.
-
-#### IO tests
-
-If you'd like to run input-based tests on student code, simply add a file called `<TEST_NAME>_input.txt`
-to the `sample_inputs` directory, and a corresponding file called `<TEST_NAME>_output.txt` to the 
-`sample_outputs` directory for each input-based test.  The process for scoring each of these tests is 
-as follows:
-
-1. The contents of the input file for a given test are redirected (`<`) into the student's program, and 
-the output saved to a file.
-2. The student output file is compared with the instructor-provided output using a *fuzzy diff*.  That is,
-an exact match is not required for the student to earn credit for a particular test.  Partial credit is 
-awarded based on the similarity of student output and the correct output.  
-
-#### Argument tests (often used for file io)
-
-Include files and argument lists in `arg_tests/` to run the students main file against many different argument options.
-Things you specify include:
-* `arg_tests/args/*_args.txt` list of arguments, one line per file.
-* `arg_tests/diffs/` where their diffs between `goals/` and `outputs/` show up.
-* `arg_tests/files/*_input.txt` if any file-inputs are specified via argument lists (optional)
-* `arg_tests/goals/*_output.txt` desired outputs you specify
-* `arg_tests/outputs/` output folder can be populated by file or std-out, depending on how your args are structured.
-
-#### Unit tests
-
-To run tests that operate on small parts (units) of student code instead of their driver, `grade.sh`
-provides a set of utility wrappers for all supported languages that minimize the overhead necessary to 
-write a test.  Currently, one file corresponds to one unit test.  All unit tests must be in the `unit_tests`
-directory.
-
-`stdout` and `stderr` from the unit tests will be displayed to the student when running interactively and as 
-part of a CI job, so failure-mode-specific messages can be helpful.
-
-###### Python unit tests
-
-In addition to the root of the repository, the `admin_files` directory should be available to import from.
-Python interpreters differ in how they handle import paths, so it may be useful to consult the example Python 
-unit tests.
-
-To write a test file, start by importing the test utilities with `import test_utils`.  After importing all
-required student files, you can write a test using the provided `test_wrapper` decorator:
-
-```py
-@test_utils.test_wrapper
-def test() -> bool:
-  result = False
-  """
-  Do stuff with student code here, assigning the test result to
-  the "result" variable...
-  """
-  return result
-
-if __name__ == "__main__":
-  test()
+@ #
+% $
 ```
 
-The test function must always return `bool`.
+For each puzzle you are to:
+* Dynamically allocate a 2-D char array of the specified size
+* Fill your puzzle with symbols from standard input
+* Perform the necessary shifts to solve the puzzle, and output the result
+* De-allocate your 2-D array to be used for the next puzzle
 
-###### C++ unit tests
+## Scoring:
 
-If all student code is in the root directory of the repository, no special configuration is needed.  
-Currently, this is the only supported location for student code.
+To get full points on the assignment...
+* Implement each function in the _Puzzle_ class **(unit_tests)**
+* Complete the _main()_ function to solve all puzzles **(stdio_tests)**
+* Fix any memory leaks or invalid memory operations **(mem_tests)**
+* Address any warnings given by cppcheck **(static analysis)**
+* Format your code using the clang-format utility **(style check)**
 
-To write a test, only a small `main()` function is required:
+# General information regarding this repository
 
-```cpp
-#include "test_utils.hpp"
+## Coding
+Tips for coding.
 
-int main(const int argc, const char **argv)
-{
-  return test_wrapper(argc, argv, []() {
-    bool result = false;
-    /**
-     * Do stuff with student code here, assigning the test result to
-     * the "result" variable...
-     */
-    return result;
-  });
-}
-```
+### What to name my files?
+We give you empty files corresponding to those you should complete!
 
-A lambda is used for uniformity, but other functions can be written and called from within the lambda
-as appropriate.  Note that the use of `argc`/`argv` is non-optional, as command-line arguments are used to
-ensure that the test is not bypassed by student code.
+### Where to code?
+We assume you're on a Linux machine, and can install all the software needed by this auto-grader.
+See the syllabus for more details.
 
-###### Bash unit tests
+### How to get this code?
+Find the blue button that says "clone", on the home page of this repository.
+If you have an ssh key set up:
+ `git clone git@... `
+If you don't have an ssh set up, or know what that is:
+ `git clone https://.. `
 
-No special wrapper is needed for bash unit tests of sourced functions. 
-Just source the student file, and return "$1" for a pass, and 1 for a fail.
+### Where to read this file?
+This file is nicely displayed in the Gitlab web interface, but you can read it wherever.
 
-```sh
-#!/bin/bash
+### What to install?
+See the script's warnings.
 
-source student_file.sh
+### How to code?
+Using this script, we strongly encourage you to program incrementally. 
+Program code required by the unit tests, in the requested order. 
+In general, don't proceed to a later function if you are not passing the first one.
+If you get stuck, instead of moving on, get help!
+See the syllabus for extended coding tips.
 
-if [ ! "Test" = "Passed" ]; then
-    # For pass
-    exit "$1"
-else
-    # For fail
-    exit 1
-fi
-```
+## Auto-grader
 
-###### Rust unit tests
-Just a basic rough draft is done for Rust unit tests. 
-TODO:
-* decorator
-* exception handling
+### How to run the auto-grader on your machine?
+Run the following in the root directory of your repository:
+ `./grade.sh `
 
+## How to run the auto-grader on Gitlab-CI?
+Make sure all your files are added, committed, and pushed to the appropriate branch (see Git section below).
+Navigate to the Gitlab web interface to confirm these changes exist on the server.
 
-#### Static analysis
-Run static analyzers on the student code, and give points accordinly.
-Static analyzers supported include:
-* Python: `mypy`
-* C++: `cppcheck`
-* Bash `shellcheck`
+## How to make sure I'm getting points?
+ * Click on CI/CD -> Jobs -> the latest job.
+ * Is it passing, green, etc? 
+ * What grade does it say you have?
+ * Whatever grade the latest job says, is what we think you have!
 
-#### Code-style format tests
-Run a code format checker to automatically enforce good code style.
-Auto-formatters supported include:
-* Python: `black`
-* C++: `clang-format`
-* Bash `shfmt`
-* Rust `rustfmt`
+## std-io tests: differences between your std-out and the desired std-out
+See:  `your _diffs/ ` and  `your _outputs ` to determine what went wrong. 
+We run these diffs automatically, so you may not need to manually inspect these files.
 
-#### CFG tests
-This test is currently python-only, though I'd like to at least extend it to C++ and Rust.
-It is a simple task of mimicking a CFG by producing it's code.
-This is a low-stakes assignment intended for early in the semester of an introductory programming course.
-The workflow looks like this:
-1. Instructor programs simple logic (if, for, while, etc) into a little program.
-2. Generate cfg from code.
-3. Include just the cfg image file in student repo under `cfg_tests/`
-4. Student must look at CFG to produce code originally used to generate it.
+## Unit tests: we're micromanaging your functions!
+See the unit tests themselves, and run them in your favorite debugger:
+ `unit _tests/ `
 
-#### doctest tests
-This test is currently python-only, though I'd like to at least extend it to C++ and Rust.
-Executes any doctests present in the main driver, and gives points if they all pass, and no points if any fail.
-These will be run, if you include `doctest.testmod()` in your main file.
+## Git
+Git happens...
 
-##### File existance and type check tests
-In `grade.sh` edit the associative array with filenames and their corresponding data produced with:
-```sh
-file yourfile.whatever
-```
+### add, commit, push
+From within your git repository (folder), add, commit, and push all the non-generated files. 
+This means add your cpp and png files, but not a.out, etc.
+Verify you can see the files on git-classes in the web interface.
+If you can see the correct files on git-classes in your master branch, your submission is complete.
+Make sure all the requested files are in the root directory of the repository unless otherwise specified.
 
-#### Custom tests
+## Errors
+You should not change any of the grading files themselves. 
+If you do, you will see a warning, and it will give you a 0.
+If you accidentally did that:
+`git checkout firstfourcharactersoflastcommitbyus graderfileyoubroke`
 
-If IO and unit tests cannot fully assess student code, you can also add custom tests to `grade.conf`.
-Go to the labeled section at the bottom of the file and add one `bash` function per test.  Each function
-name should begin with the string `custom_test` and assign their score (integer 0-100) to the variable
-`custom_test_score`.  You can call Python scripts or any kind of program in these tests, just remember
-to assign to `custom_test_score` at the end of each test.
+### Is the auto-grader broken?
+Is the error you're encountering our fault or yours?
+Either may be possible, while the latter is a bit more likely.
+Double-check all the diffs, and step through all code to see.
+If you think you found a bug, please let us know!
 
-For example, if for some reason you wanted to grade your students on the ratio of `std::cin` to `std::cout`
-in their C++ programs, your custom test might look like the following:
+## When is this due?
+See the syllabus!
 
-```sh
-function custom_test_cin_cout_ratio () {
-  student_file="main.cpp"
-  cin_ct=$(fgrep -o cin "$student_file" | wc -l)
-  cout_ct=$(fgrep -o cout "$student_file" | wc -l)
-  custom_test_score=$(python3 -c "print(min(100, int(($cin_ct / $cout_ct) * 100)))")
-}
-```
-
-## Syncing changes
-
-If changes are made to `grade.sh` that you would like to incorporate into an existing assignment that uses
-`grade.sh`, you should perform the following steps:
-
-1. To make sure that your upstream is configured, run `git remote -v`.  
-In addition to the information for your assignment repository (`origin`), you should see the following:
-```
-upstream        git@gitlab.com:classroomcode/grade-sh/grade-sh.git (fetch)
-upstream        git@gitlab.com:classroomcode/grade-sh/grade-sh.git (push)
-```
-
-If you do not see this, follow the [setup instructions](#getting-grade-sh) to add the base `grade-sh` repo as a remote.
-
-2. Get the changes with `git fetch upstream`
-3. Merge the changes in with `git merge upstream/master`. 
-   This may introduce merge conflicts if you have modified certain elements of the `grade.sh` base repo.
+## grade.sh: this automated grading framework
+For more details on the generalized auto-grader, see:
+https://gitlab.com/classroomcode/grade-sh/grade-sh
