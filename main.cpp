@@ -14,6 +14,7 @@ int main() {
   int rows;
   int cols;
   int moves;
+  char symbols;
   cin >> puzzles;
   Puzzle puzzle; // Use this puzzle object ONLY, don't create extras
 
@@ -26,13 +27,16 @@ int main() {
     // Allocate 2-D array
     puzzle.create_grid(rows, cols);
     // Read in symbols
+    cin >> symbols;
+    puzzle.fill_grid();
     // Read in moves (solve puzzle)
     ////////////////////////
 
     ////////////////////////
     // Print Solution
-    puzzle.delete_grid();
+    puzzle.print_grid();
     // De-allocate 2-D array
+    puzzle.delete_grid();
     //// END YOUR CODE ////
   }
 

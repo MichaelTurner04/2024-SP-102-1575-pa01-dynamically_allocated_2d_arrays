@@ -33,21 +33,21 @@ accordingly Tested by: unit_tests/unit_test_0 Post-conditions:
   - rows == r
   - cols == c
 */
-void Puzzle::create_grid(int r, int c) { 
-  rows =r;
+void Puzzle::create_grid(int r, int c) {
+  rows = r;
   cols = c;
-  symbols = new char *[r]; 
-  for(int i=0; i<r; i++){
+  symbols = new char *[r];
+  for (int i = 0; i < r; i++) {
     symbols[i] = new char[c];
   }
-  }
+}
 
 /*
 Purpose: de-allocates symbols, and sets symbols to nullptr
 Tested by: mem_tests
 */
 void Puzzle::delete_grid() {
-  for(int i=0; i<rows ;i++){
+  for (int i = 0; i < rows; i++) {
     delete[] symbols[i];
   }
   delete[] symbols;
