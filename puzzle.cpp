@@ -59,14 +59,44 @@ Purpose: shifts a row of symbols (right if reverse = false, left if reverse =
 true), wrapping the furthest symbol around
 Tested by: unit_tests/unit_test_1-3
 */
-void Puzzle::shift_row(int row, bool reverse) {}
+void Puzzle::shift_row(int row, bool reverse) {
+  if (reverse == false){
+    char temp = symbols[row][cols-1];
+    for(int i=cols -1; i> 0; --i){
+      symbols[row][i] = symbols[row][i-1];
+
+    }
+    symbols[row][0] = temp;
+  }else if(reverse == true){
+    char temp = symbols[row][0];
+    for(int i = 0; i<cols -1; ++i){
+      symbols[row][i] = symbols[row][i+1];
+    }
+    symbols[row][cols-1] = temp;
+  }
+}
 
 /*
 Purpose: shifts a column of symbols (down if reverse = false, up if reverse =
 true), wrapping the furthest symbol around
 Tested by: unit_tests/unit_test_4-6
 */
-void Puzzle::shift_col(int col, bool reverse) {}
+void Puzzle::shift_col(int col, bool reverse) {
+  if (reverse == false){
+    char temp = symbols[rows- 1][cols];
+    for(int i= rows -1; i> 0; --i){
+      symbols[i][col] = symbols[i-1][col];
+
+    }
+    symbols[0][col] = temp;
+  }else if(reverse == true){
+    char temp = symbols[0][col];
+    for(int i = 0; i<rows -1; ++i){
+      symbols[i][col] = symbols[i+1][col];
+    }
+    symbols[rows - 1][cols] = temp;
+  }
+}
 
 // These functions are given to you, no need to change them
 
