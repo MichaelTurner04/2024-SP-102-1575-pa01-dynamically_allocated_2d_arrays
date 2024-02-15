@@ -31,6 +31,25 @@ int main() {
     puzzle.fill_grid();
     // Read in moves (solve puzzle)
     ////////////////////////
+    char a;
+    char b;
+    for (int i = 0; i < moves; i++) {
+      cin >> a;
+      cin >> b;
+      if (b == 'R' || b == 'L') {
+        if (b == 'R') {
+          puzzle.shift_row(a, false);
+        } else if (b == 'L') {
+          puzzle.shift_row(a, true);
+        }
+      } else if (b == 'U' || b == 'D') {
+        if (b == 'U') {
+          puzzle.shift_col(a, true);
+        } else if (b == 'D') {
+          puzzle.shift_col(a, false);
+        }
+      }
+    }
 
     ////////////////////////
     // Print Solution
