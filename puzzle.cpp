@@ -27,42 +27,46 @@ public:
 */
 
 /*
-Purpose: turn symbols into r-by-c dynamic char array, and set members rows/cols accordingly
-Tested by: unit_tests/unit_test_0
-Post-conditions:
+Purpose: turn symbols into r-by-c dynamic char array, and set members rows/cols
+accordingly Tested by: unit_tests/unit_test_0 Post-conditions:
   - symbols points to r-by-c dynamic array
   - rows == r
   - cols == c
 */
-void Puzzle::create_grid(int r, int c) {
-
-}
+void Puzzle::create_grid(int r, int c) { 
+  rows =r;
+  cols = c;
+  symbols = new char *[r]; 
+  for(int i=0; i<r; i++){
+    symbols[i] = new char[c];
+  }
+  }
 
 /*
 Purpose: de-allocates symbols, and sets symbols to nullptr
 Tested by: mem_tests
 */
 void Puzzle::delete_grid() {
-
+  for(int i=0; i<rows ;i++){
+    delete[] symbols[i];
+  }
+  delete[] symbols;
+  symbols = nullptr;
 }
 
 /*
 Purpose: shifts a row of symbols (right if reverse = false, left if reverse =
-true), wrapping the furthest symbol around 
+true), wrapping the furthest symbol around
 Tested by: unit_tests/unit_test_1-3
 */
-void Puzzle::shift_row(int row, bool reverse) {
-
-}
+void Puzzle::shift_row(int row, bool reverse) {}
 
 /*
 Purpose: shifts a column of symbols (down if reverse = false, up if reverse =
-true), wrapping the furthest symbol around 
+true), wrapping the furthest symbol around
 Tested by: unit_tests/unit_test_4-6
 */
-void Puzzle::shift_col(int col, bool reverse) {
-
-}
+void Puzzle::shift_col(int col, bool reverse) {}
 
 // These functions are given to you, no need to change them
 
@@ -91,11 +95,10 @@ void Puzzle::print_grid() const {
   cout << endl;
 }
 
-
 // Default Member Functions
 
 const Puzzle &Puzzle::operator=(const Puzzle &rhs) {
-// Performs a deep-copy of a Puzzle object
+  // Performs a deep-copy of a Puzzle object
 
   delete_grid();
   create_grid(rhs.rows, rhs.cols);
@@ -109,11 +112,11 @@ const Puzzle &Puzzle::operator=(const Puzzle &rhs) {
 Puzzle::Puzzle(const Puzzle &source) {
 
   symbols = nullptr;
-  *this = source;  // invokes operator=
+  *this = source; // invokes operator=
 }
 
 Puzzle::~Puzzle() {
-// De-allocates dynamic member variables
+  // De-allocates dynamic member variables
 
   if (symbols != nullptr)
     delete_grid();
