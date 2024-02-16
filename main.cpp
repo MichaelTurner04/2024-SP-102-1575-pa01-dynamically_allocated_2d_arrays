@@ -12,7 +12,6 @@ Use puzzle functions here to pass stdio_tests
 
 int main() {
   int puzzles;
-  char symbols;
   cin >> puzzles;
   Puzzle puzzle; // Use this puzzle object ONLY, don't create extras
 
@@ -26,7 +25,7 @@ int main() {
     // Allocate 2-D array
     puzzle.create_grid(rows, cols);
     // Read in symbols
-    cin >> symbols;
+    // cin >> symbols;
     puzzle.fill_grid();
     // Read in moves (solve puzzle)
     ////////////////////////
@@ -56,10 +55,13 @@ int main() {
     for (int i = 0; i < moves; i++) {
       int num1;
       char dir;
-      string killMe;
+      cin >> num1;
+      cin >> dir;
+      /*string killMe;
       getline(cin, killMe);
       num1 = killMe[0];
       dir = killMe[2];
+      */
       /*if (killMe[1] != ' ') {
         num1 += killMe[1];
         dir = killMe[3];
@@ -67,9 +69,9 @@ int main() {
         dir = killMe[2];
       }*/
 
-      cout << num1 << ", " << dir << endl;
+      // cout << num1 << ", " << dir << endl;
 
-      /*if (dir == 'R') {
+      if (dir == 'R') {
         puzzle.shift_row(num1, false);
       } else if (dir == 'L') {
         puzzle.shift_row(num1, true);
@@ -79,7 +81,7 @@ int main() {
         puzzle.shift_col(num1, false);
       } else {
         cout << "error" << endl;
-      }*/
+      }
     }
 
     ////////////////////////
