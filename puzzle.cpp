@@ -62,13 +62,13 @@ Tested by: unit_tests/unit_test_1-3
 void Puzzle::shift_row(int row, bool reverse) {
   if (reverse == false) {
     char temp = symbols[row][cols - 1];
-    for (int i = cols - 1; i > 0; --i) {
+    for (int i = cols - 1; i > 0; i--) {
       symbols[row][i] = symbols[row][i - 1];
     }
     symbols[row][0] = temp;
   } else if (reverse == true) {
     char temp = symbols[row][0];
-    for (int i = 0; i < cols - 1; ++i) {
+    for (int i = 0; i < cols - 1; i++) {
       symbols[row][i] = symbols[row][i + 1];
     }
     symbols[row][cols - 1] = temp;
@@ -83,13 +83,13 @@ Tested by: unit_tests/unit_test_4-6
 void Puzzle::shift_col(int col, bool reverse) {
   if (reverse == false) {
     char temp = symbols[rows - 1][col];
-    for (int i = rows - 1; i > 0; --i) {
+    for (int i = rows - 1; i > 0; i--) {
       symbols[i][col] = symbols[i - 1][col];
     }
     symbols[0][col] = temp;
   } else if (reverse == true) {
     char temp = symbols[0][col];
-    for (int i = 0; i < rows - 1; ++i) {
+    for (int i = 0; i < rows - 1; i++) {
       symbols[i][col] = symbols[i + 1][col];
     }
     symbols[rows - 1][col] = temp;
