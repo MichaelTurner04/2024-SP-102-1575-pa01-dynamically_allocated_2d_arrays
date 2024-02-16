@@ -21,9 +21,7 @@ int main() {
   for (int k = 0; k < puzzles; k++) {
     //// YOUR CODE HERE ////
     // Read in rows, cols, moves
-    cin >> rows;
-    cin >> cols;
-    cin >> moves;
+    cin >> rows >> cols >> moves;
     // Allocate 2-D array
     puzzle.create_grid(rows, cols);
     // Read in symbols
@@ -31,23 +29,21 @@ int main() {
     puzzle.fill_grid();
     // Read in moves (solve puzzle)
     ////////////////////////
-    char a;
+    int a;
     char b;
     for (int i = 0; i < moves; i++) {
-      cin >> a;
-      cin >> b;
-      if (b == 'R' || b == 'L') {
-        if (b == 'R') {
-          puzzle.shift_row(a, false);
-        } else if (b == 'L') {
-          puzzle.shift_row(a, true);
-        }
-      } else if (b == 'U' || b == 'D') {
-        if (b == 'U') {
-          puzzle.shift_col(a, true);
-        } else if (b == 'D') {
-          puzzle.shift_col(a, false);
-        }
+      cin >> a >> b;
+
+      if (b == 'R') {
+        puzzle.shift_row(a, false);
+      } else if (b == 'L') {
+        puzzle.shift_row(a, true);
+      } else if (b == 'U') {
+        puzzle.shift_col(a, true);
+      } else if (b == 'D') {
+        puzzle.shift_col(a, false);
+      } else {
+        cout << "error" << endl;
       }
     }
 
